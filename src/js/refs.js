@@ -15,4 +15,5 @@ export const refs = {
   wishlistCount: document.querySelector('[data-wishlist-count]'),
   addToWishlistBtn: document.querySelector('.modal-product__btn--wishlist'),
   loadMoreBtn: document.querySelector('.load-more-btn'),
+  scrollToTopBtn: document.querySelector('.scroll-top-btn'),
 };

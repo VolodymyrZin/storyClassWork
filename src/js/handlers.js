@@ -10,18 +10,21 @@ import {
   getProductById,
   getProducts,
   getProductsByCategory,
+  getProductsByIds,
   getProductsByValue,
 } from './products-api';
 import { refs } from './refs';
 import {
   clearProductList,
   hideLoader,
+  hideLoadMoreBtn,
   hideNotFound,
   renderCategories,
   renderProductInModal,
   renderProducts,
   showLoader,
   showLoadMoreBtn,
+  showLoadMoreBtnLoading,
   showNotFound,
   updateCounters,
 } from './render-function';
@@ -54,6 +57,23 @@ async function initHomePage() {
     hideLoader();
   }
 }
+async function initWishListPage() {
+  updateCounters(getCartItems(), getWishlistItems());
+  const wishListItems = getWishlistItems();
+  clearProductList();
+  if (wishListItems.length === 0) {
+    showNotFound();
+    return;
+  }
+  try {
+    hideNotFound();
+    const products = await getProductsByIds(wishListItems);
+    renderProducts(products);
+  } catch (error) {
+    console.log('error during loading wishlist of products', error);
+    showNotFound();
+  }
+}
 async function handleCategoryClick(event) {
   const categoryButton = event.target.closest('.categories__btn');
   try {
@@ -62,6 +82,7 @@ async function handleCategoryClick(event) {
       return;
     }
     clearProductList();
+    hideLoadMoreBtn();
     const allCategoryButtons =
       refs.categoriesList.querySelectorAll('.categories__btn');
     toggleActiveClass(
@@ -75,6 +96,7 @@ async function handleCategoryClick(event) {
       const { products } = await getProducts(page);
       renderProducts(products);
       hideNotFound();
+      showLoadMoreBtn();
     } else {
       const { products } = await getProductsByCategory(categorySlag);
       if (products.length > 0) {
@@ -116,6 +138,7 @@ async function handleSearchSubmit(event) {
   }
   try {
     clearProductList();
+    hideLoadMoreBtn();
     showLoader();
     const { products } = await getProductsByValue(searchValue);
     if (products.length > 0) {
@@ -133,9 +156,11 @@ async function handleSearchSubmit(event) {
 async function handleSearchClear(event) {
   refs.searchForm.reset();
   clearProductList();
+
   try {
     const { products } = await getProducts(page);
     renderProducts(products);
+    showLoadMoreBtn();
     hideNotFound();
   } catch (error) {
     console.log('Error render products', error);
@@ -181,6 +206,7 @@ function handleAddToWishlistClick(event) {
 }
 async function handleLoadMoreBtnClick(event) {
   page += 1;
+  showLoadMoreBtnLoading();
   try {
     const { products, total } = await getProducts(page);
     renderProducts(products);
@@ -189,8 +215,10 @@ async function handleLoadMoreBtnClick(event) {
     console.log('error load more btn', error);
   }
 }
+
 export {
   initHomePage,
+  initWishListPage,
   handleCategoryClick,
   handleProductListClick,
   handleSearchSubmit,

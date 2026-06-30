@@ -45,10 +45,15 @@ async function getProductsByValue(searchValue) {
   );
   return data;
 }
+async function getProductsByIds(ids) {
+  const promises = ids.map(id => getProductById(id));
+  return Promise.all(promises);
+}
 export {
   getProductsByValue,
   getCategories,
   getProducts,
   getProductsByCategory,
   getProductById,
+  getProductsByIds,
 };

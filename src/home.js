@@ -21,3 +21,16 @@ refs.searchFormClearButton.addEventListener('click', handleSearchClear);
 refs.addToCartBtn.addEventListener('click', handleAddToCartClick);
 refs.addToWishlistBtn.addEventListener('click', handleAddToWishlistClick);
 refs.loadMoreBtn.addEventListener('click', handleLoadMoreBtnClick);
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 300) {
+    refs.scrollToTopBtn.classList.add('scroll-top-btn--visible');
+  } else {
+    refs.scrollToTopBtn.classList.remove('scroll-top-btn--visible');
+  }
+});
+refs.scrollToTopBtn.addEventListener('click', () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
+});
