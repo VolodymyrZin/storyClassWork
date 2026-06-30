@@ -31,7 +31,9 @@
   animation: scaleUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   overflow-y: auto;
-  transition: background-color 0.3s, color 0.3s;
+  transition:
+    background-color 0.3s,
+    color 0.3s;
 }
 
 .modal__close-btn {
@@ -104,7 +106,7 @@
   list-style: none;
 }
 
-.modal-product__tags li {
+.modal-product__tag {
   padding: 0.3rem 0.8rem;
 
   color: white;
